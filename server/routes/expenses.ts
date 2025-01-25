@@ -37,6 +37,10 @@ export const expensesRoute = new Hono()
     }
     return c.json(expense);
   })
+  .get("/total", (c) => {
+    const totalSpent = fakeExpenses.reduce((acc, expense) => acc + expense.amount, 0);
+    return c.json({ totalSpent });
+  })
   .delete("/:id{[0-9]+}", (c) => {
     const id = c.req.param("id");
     const index = fakeExpenses.findIndex((e) => e.id === Number(id));

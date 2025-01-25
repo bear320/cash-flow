@@ -1,19 +1,24 @@
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const App = () => {
+  const [totalSpent, setTotalSpent] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/expenses/total")
+      .then((res) => res.json())
+      .then((data) => setTotalSpent(data.totalSpent));
+  });
+
   return (
-    <Card>
+    <Card className="w-[350px] m-auto">
       <CardHeader>
-        <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardTitle>Total Spent</CardTitle>
+        <CardDescription>The total amount you've spent</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Card Content</p>
+        <p>${totalSpent}</p>
       </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
     </Card>
   );
 };
