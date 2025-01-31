@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const getAllExpenses = async () => {
   const res = await api.expenses.$get();
@@ -24,7 +25,31 @@ const Expenses = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  return <div className="p-2">{isPending ? "Loading..." : JSON.stringify(data)}</div>;
+  return (
+    <div className="p-2 max-w-3xl m-auto">
+      <Table>
+        <TableCaption>A list of your all expenses.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Id</TableHead>
+            <TableHead>Title</TableHead>
+            <TableHead>Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {isPending
+            ? "Loading..."
+            : data.expenses.map((expense) => (
+                <TableRow key={expense.id}>
+                  <TableCell className="font-medium">{expense.id}</TableCell>
+                  <TableCell>{expense.title}</TableCell>
+                  <TableCell>{expense.amount}</TableCell>
+                </TableRow>
+              ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 };
 
 export const Route = createFileRoute("/expenses")({
