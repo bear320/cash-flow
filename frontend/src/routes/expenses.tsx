@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const getAllExpenses = async () => {
   const res = await api.expenses.$get();
@@ -16,10 +17,6 @@ const getAllExpenses = async () => {
 
 const Expenses = () => {
   const { isPending, error, data } = useQuery({ queryKey: ["get-all-expenses"], queryFn: getAllExpenses });
-
-  if (isPending) {
-    return <p>Loading...</p>;
-  }
 
   if (error) {
     return <p>Error: {error.message}</p>;
@@ -38,7 +35,19 @@ const Expenses = () => {
         </TableHeader>
         <TableBody>
           {isPending
-            ? "Loading..."
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell className="font-medium">
+                    <Skeleton className="h-4" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4" />
+                  </TableCell>
+                </TableRow>
+              ))
             : data.expenses.map((expense) => (
                 <TableRow key={expense.id}>
                   <TableCell className="font-medium">{expense.id}</TableCell>
