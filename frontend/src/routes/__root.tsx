@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         </Link>
       </div>
       <hr />
-      <div className="p-2  gap-2 max-w-2xl m-auto">
+      <div className="p-2 gap-2 max-w-2xl m-auto">
         <Outlet />
       </div>
       <TanStackRouterDevtools />
