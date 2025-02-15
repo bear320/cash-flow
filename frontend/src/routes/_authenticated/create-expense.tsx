@@ -14,8 +14,6 @@ const CreateExpense = () => {
       amount: "0",
     },
     onSubmit: async ({ value }) => {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
       const res = await api.expenses.$post({ json: value });
 
       if (!res.ok) {
