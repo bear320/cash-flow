@@ -1,21 +1,10 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { z } from "zod";
-import { getUser } from "../kinde";
+import { eq, desc, sum, and } from "drizzle-orm";
 import { db } from "../db";
 import { expenses as expensesTable } from "../db/schema/expenses";
-import { eq, desc, sum, and } from "drizzle-orm";
-
-const expenseSchema = z.object({
-  id: z.number().int().positive().min(1),
-  title: z.string().min(3).max(100),
-  // amount: z.number().int().positive(),
-  amount: z.string(),
-});
-
-type Expense = z.infer<typeof expenseSchema>;
-
-const createExpenseSchema = expenseSchema.omit({ id: true });
+import { getUser } from "../kinde";
+import { createExpenseSchema } from "../types";
 
 export const expensesRoute = new Hono()
   .get("/", getUser, async (c) => {

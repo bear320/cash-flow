@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@tanstack/react-form";
 import { api } from "@/lib/api";
+import { z } from "zod";
+import { createExpenseSchema } from "@server/types";
 
 const CreateExpense = () => {
   const navigate = useNavigate();
@@ -37,6 +39,9 @@ const CreateExpense = () => {
       >
         <form.Field
           name="title"
+          validators={{
+            onChange: createExpenseSchema.shape.title,
+          }}
           children={(field) => {
             return (
               <>
@@ -57,6 +62,9 @@ const CreateExpense = () => {
         />
         <form.Field
           name="amount"
+          validators={{
+            onChange: createExpenseSchema.shape.amount,
+          }}
           children={(field) => {
             return (
               <>
