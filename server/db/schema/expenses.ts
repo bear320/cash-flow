@@ -1,4 +1,6 @@
 import { text, pgTable, serial, index, numeric, timestamp } from "drizzle-orm/pg-core";
+import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
 
 export const expenses = pgTable(
   "expenses",
@@ -15,3 +17,13 @@ export const expenses = pgTable(
     };
   }
 );
+
+export const selectExpensesSchema = createSelectSchema(expenses, {
+  title: z.string().min(3, {
+    message: "Title must be at least 3 characters.",
+  }),
+  amount: z.string().regex(/^\d+(\.\d{1,2})?$/, {
+    message: "Amount must be a valid monetary amount.",
+  }),
+});
+export const insertExpensesSchema = createInsertSchema(expenses);
