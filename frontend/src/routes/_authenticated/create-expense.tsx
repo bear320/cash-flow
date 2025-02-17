@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@tanstack/react-form";
 import { api } from "@/lib/api";
-import { z } from "zod";
 import { createExpenseSchema } from "@server/types";
 
 const CreateExpense = () => {
@@ -30,7 +29,7 @@ const CreateExpense = () => {
     <div className="p-2">
       <h2>Create Expense</h2>
       <form
-        className="max-w-xl m-auto"
+        className="max-w-xl m-auto flex flex-col gap-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -44,7 +43,7 @@ const CreateExpense = () => {
           }}
           children={(field) => {
             return (
-              <>
+              <div>
                 <Label htmlFor={field.name}>Title</Label>
                 <Input
                   id={field.name}
@@ -56,7 +55,7 @@ const CreateExpense = () => {
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
                   <em>{field.state.meta.errors.join(", ")}</em>
                 ) : null}
-              </>
+              </div>
             );
           }}
         />
@@ -67,7 +66,7 @@ const CreateExpense = () => {
           }}
           children={(field) => {
             return (
-              <>
+              <div>
                 <Label htmlFor={field.name}>Amount</Label>
                 <Input
                   type="number"
@@ -80,7 +79,7 @@ const CreateExpense = () => {
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
                   <em>{field.state.meta.errors.join(", ")}</em>
                 ) : null}
-              </>
+              </div>
             );
           }}
         />
