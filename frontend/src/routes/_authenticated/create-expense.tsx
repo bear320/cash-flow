@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { useForm } from "@tanstack/react-form";
 import { api } from "@/lib/api";
 import { createExpenseSchema } from "@server/types";
@@ -79,6 +80,24 @@ const CreateExpense = () => {
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
                   <em>{field.state.meta.errors.join(", ")}</em>
                 ) : null}
+              </div>
+            );
+          }}
+        />
+        <form.Field
+          name="date"
+          validators={{
+            onChange: createExpenseSchema.shape.date,
+          }}
+          children={(field) => {
+            return (
+              <div className="self-center">
+                <Calendar
+                  mode="single"
+                  selected={field.state.value}
+                  onSelect={(e) => field.handleChange(e.target.value)}
+                  className="rounded-md border"
+                />
               </div>
             );
           }}
