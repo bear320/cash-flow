@@ -15,6 +15,13 @@
       "when": 1739595577262,
       "tag": "0001_puzzling_skaar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739967589763,
+      "tag": "0002_loud_johnny_storm",
+      "breakpoints": true
     }
   ]
 }
