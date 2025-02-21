@@ -20,3 +20,14 @@ export const useQueryOptions = queryOptions({
   queryFn: getCurrentUser,
   staleTime: Infinity,
 });
+
+export const getAllExpenses = async () => {
+  const res = await api.expenses.$get();
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch total spent");
+  }
+
+  const data = await res.json();
+  return data;
+};

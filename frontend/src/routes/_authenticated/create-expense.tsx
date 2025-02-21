@@ -1,14 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "@tanstack/react-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useForm } from "@tanstack/react-form";
-import { api } from "@/lib/api";
+import { api, getAllExpensesQueryOptions } from "@/lib/api";
 import { createExpenseSchema } from "@server/types";
 
 const CreateExpense = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const form = useForm({
     defaultValues: {
@@ -17,11 +19,19 @@ const CreateExpense = () => {
       date: new Date().toISOString(),
     },
     onSubmit: async ({ value }) => {
+      const existingExpenses = await queryClient.ensureQueryData(getAllExpensesQueryOptions);
+
       const res = await api.expenses.$post({ json: value });
 
       if (!res.ok) {
         throw new Error("Failed to create expense");
       }
+
+      const newExpense = await res.json();
+      queryClient.setQueryData(getAllExpensesQueryOptions.queryKey, {
+        ...existingExpenses,
+        expenses: [newExpense, ...existingExpenses.expenses],
+      });
 
       navigate({ to: "/expenses" });
     },
