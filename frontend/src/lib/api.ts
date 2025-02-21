@@ -31,3 +31,9 @@ export const getAllExpenses = async () => {
   const data = await res.json();
   return data;
 };
+
+export const getAllExpensesQueryOptions = queryOptions({
+  queryKey: ["get-all-expenses"],
+  queryFn: getAllExpenses,
+  staleTime: 1000 * 60 * 5,
+});
