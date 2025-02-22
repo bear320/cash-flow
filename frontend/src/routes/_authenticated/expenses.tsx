@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getAllExpensesQueryOptions } from "@/lib/api";
+import { getAllExpensesQueryOptions, loadingCreateExpenseQueryOptions } from "@/lib/api";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Expenses = () => {
   const { isPending, error, data } = useQuery(getAllExpensesQueryOptions);
+  const { data: loadingCreateExpense } = useQuery(loadingCreateExpenseQueryOptions);
 
   if (error) {
     return <p>Error: {error.message}</p>;
@@ -24,6 +25,16 @@ const Expenses = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          {loadingCreateExpense?.expense && (
+            <TableRow>
+              <TableCell className="font-medium">
+                <Skeleton className="h-4" />
+              </TableCell>
+              <TableCell>{loadingCreateExpense?.expense.title}</TableCell>
+              <TableCell>{loadingCreateExpense?.expense.amount}</TableCell>
+              <TableCell>{loadingCreateExpense?.expense.date.split("T")[0]}</TableCell>
+            </TableRow>
+          )}
           {isPending
             ? Array.from({ length: 3 }).map((_, i) => (
                 <TableRow key={i}>

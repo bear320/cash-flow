@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { api, getAllExpensesQueryOptions } from "@/lib/api";
+import { toast } from "sonner";
+import { createExpense, getAllExpensesQueryOptions, loadingCreateExpenseQueryOptions } from "@/lib/api";
 import { createExpenseSchema } from "@server/types";
 
 const CreateExpense = () => {
@@ -21,19 +22,29 @@ const CreateExpense = () => {
     onSubmit: async ({ value }) => {
       const existingExpenses = await queryClient.ensureQueryData(getAllExpensesQueryOptions);
 
-      const res = await api.expenses.$post({ json: value });
-
-      if (!res.ok) {
-        throw new Error("Failed to create expense");
-      }
-
-      const newExpense = await res.json();
-      queryClient.setQueryData(getAllExpensesQueryOptions.queryKey, {
-        ...existingExpenses,
-        expenses: [newExpense, ...existingExpenses.expenses],
-      });
-
       navigate({ to: "/expenses" });
+
+      queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, { expense: value });
+
+      try {
+        const newExpense = await createExpense({ value });
+
+        queryClient.setQueryData(getAllExpensesQueryOptions.queryKey, {
+          ...existingExpenses,
+          expenses: [newExpense, ...existingExpenses.expenses],
+        });
+
+        toast("Success", {
+          description: `Successfully created new expense: ${newExpense.title}`,
+        });
+      } catch (error) {
+        console.error(error);
+        toast("Error", {
+          description: "Failed to create expense.",
+        });
+      } finally {
+        queryClient.setQueryData(loadingCreateExpenseQueryOptions.queryKey, {});
+      }
     },
   });
 

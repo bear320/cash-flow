@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, Link, Outlet } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 interface MyRouterContext {
@@ -33,6 +34,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       <div className="p-2 gap-2 max-w-2xl m-auto">
         <Outlet />
       </div>
+      <Toaster />
       <TanStackRouterDevtools />
     </>
   ),
